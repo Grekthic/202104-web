@@ -1,0 +1,35 @@
+﻿// Variables de colores
+$main-text-color: #ff0000; // El color principal para los textos del aplicativo
+$black: #010101;
+
+body {
+    color: $main-text-color;
+    h1 {
+        color: $black;
+    }
+}
+
+// $size puede ser small o large
+@mixin dimensionesRectangulo($size) {
+    @if $size == small {
+        width: 100px;
+        height: 50px;
+    }
+
+    @if $size == large {
+        width: 500px;
+        height: 200px;
+    }
+}
+
+.rectangulos {
+    li {
+        border: 1px solid #000;
+    }
+    .small {
+        @include dimensionesRectangulo(small)
+    }
+    .large {
+        @include dimensionesRectangulo(large)
+    }
+}
