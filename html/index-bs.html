@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <header class="border-bottom pb-3 mb-4 d-flex flex-column flex-sm-row align-items-center">
+    <header class="border-bottom p-3 mb-4 d-flex flex-column flex-sm-row align-items-center">
         <a href="#" class="d-flex align-items-center text-dark text-decoration-none">
             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" class="me-2" viewBox="0 0 118 94" role="img">
                 <title>Bootstrap</title>
@@ -27,52 +27,47 @@
         </a>
         <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
             ✅ <a href="#">Inicio</a>
-
             ✅ <a href="#">Acerca de</a>
-
             ✅ <a href="#">Contacto</a>
         </nav>
     </header>
-    <article>
+    <main class="p-3">
         <section>
-            Contenido de mi pagina
+            <h2>Inputs HTML5</h2>
+            <form action="">
+                <div>
+                    <label class="form-label">Texto <input class="form-control" type="text"
+                            placeholder="Escribe algun texto"></label>
+                </div>
+                <div>
+                    <label class="form-label">Color Selector <input class="form-control" type="color"></label>
+                </div>
+                <div>
+                    <label class="form-label">Datetime <input class="form-control" type="date"></label>
+                </div>
+                <div>
+                    <label class="form-label">Tel <input class="form-control" type="tel"></label>
+                </div>
+                <div>
+                    <label class="form-label">Email <input class="form-control" type="email" autocomplete="off"></label>
+                </div>
+                <div>
+                    <label class="form-label">Input Autocomplete Off <input class="form-control" type="text"
+                            autocomplete="off"></label>
+                </div>
+                <div>
+                    <label class="form-label">Data List <input class="form-control" type="text"
+                            list="lista-comidas"></label>
+                    <datalist id="lista-comidas">
+                        <option value="Lomo saltado"></option>
+                        <option value="Cebiche"></option>
+                        <option value="Papa rellena"></option>
+                    </datalist>
+                </div>
+                <input class="btn btn-primary" type="submit" value="Enviar!">
+            </form>
         </section>
-    </article>
-    <aside>
-        Otras opciones
-    </aside>
-    <section>
-        <h2>Inputs HTML5</h2>
-        <form action="">
-            <div>
-                <label>Texto <input type="text" placeholder="Escribe algun texto"></label>
-            </div>
-            <div>
-                <label>Color Selector <input type="color"></label>
-            </div>
-            <div>
-                <label>Datetime <input type="date"></label>
-            </div>
-            <div>
-                <label>Tel <input type="tel"></label>
-            </div>
-            <div>
-                <label>Email <input type="email" autocomplete="off"></label>
-            </div>
-            <div>
-                <label>Input Autocomplete Off <input type="text" autocomplete="off"></label>
-            </div>
-            <div>
-                <label>Data List <input type="text" list="lista-comidas"></label>
-                <datalist id="lista-comidas">
-                    <option value="Lomo saltado"></option>
-                    <option value="Cebiche"></option>
-                    <option value="Papa rellena"></option>
-                </datalist>
-            </div>
-            <input type="submit" value="Enviar!">
-        </form>
-    </section>
+    </main>
     <footer>
         Todos los derechos reservados 2021
     </footer>
