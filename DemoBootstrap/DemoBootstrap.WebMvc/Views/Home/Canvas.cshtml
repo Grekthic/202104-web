@@ -1,0 +1,22 @@
+﻿<div>
+    <h1>
+        Ejercicios Varios
+    </h1>
+    <h2>Canvas</h2>
+    <canvas id="main-canvas"></canvas>
+    <h2>Audio</h2>
+    <audio controls="controls">
+        <source src="file.mp3" type="audio/mp3" />
+    </audio>
+</div>
+
+@section Scripts {
+    <script>
+        const canvas = document.getElementById("main-canvas");
+        const ctx = canvas.getContext("2d");
+
+        // Pintar de un color
+        ctx.fillStyle = "#ff0000";
+        ctx.fillRect(10, 10, 100, 80);
+    </script>
+}

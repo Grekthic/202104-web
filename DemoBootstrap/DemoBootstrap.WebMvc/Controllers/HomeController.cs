@@ -38,5 +38,10 @@ namespace DemoBootstrap.WebMvc.Controllers
         {
             return View();
         }
+
+        public IActionResult Varios()
+        {
+            return View();
+        }
     }
 }
