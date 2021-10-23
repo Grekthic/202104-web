@@ -5,9 +5,13 @@
     <h2>Canvas</h2>
     <canvas id="main-canvas"></canvas>
     <h2>Audio</h2>
-    <audio controls="controls">
-        <source src="file.mp3" type="audio/mp3" />
+    <audio id="audio-fondo" controls>
+        <source src="~/audio/audio.mp3" type="audio/mp3" />
     </audio>
+    <h2>Gelocation</h2>
+    <button id="btn-geolocation" class="btn btn-sm btn-primary">Obtener ubicacion</button>
+    <br />
+    <a href="#" id="link-mapa" target="_blank"></a>
 </div>
 
 @section Scripts {
@@ -18,5 +22,38 @@
         // Pintar de un color
         ctx.fillStyle = "#ff0000";
         ctx.fillRect(10, 10, 100, 80);
+
+        // Obtener el control de audio
+        //const audioFondo = document.getElementById("audio-fondo");
+        //audioFondo.play();
+
+        // Para la Geolocalizacion
+        function ubicarme() {
+            // Obtener el link
+            const linkMapa = document.getElementById("link-mapa");
+
+            function ubicacionSatisfactoria(position) {
+                console.log("La ubicacion es", position)
+                const latitud = position.coords.latitude;
+                const longitud = position.coords.longitude;
+                // Asignar los valores al link
+                linkMapa.href = `https://www.openstreetmap.org/#map=18/${latitud}/${longitud}`;
+                linkMapa.textContent = `Ubicacion - Latitud: ${latitud}, Longitud: ${longitud}`;
+            }
+
+            function ubicacionError() {
+                console.error("No se pudo obtener la ubicacion")
+            }
+
+            // Verificar si el navegador permite la geolocalizacion
+            if (!navigator.geolocation) {
+                console.error("El navegador no soporta la geolocalizacion o no tiene los permisos");
+            } else {
+                navigator.geolocation.getCurrentPosition(ubicacionSatisfactoria, ubicacionError)
+            }
+        }
+
+        document.getElementById("btn-geolocation").addEventListener("click", ubicarme)
+
     </script>
 }
