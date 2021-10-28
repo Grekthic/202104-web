@@ -1,5 +1,7 @@
-// Importar la libreri jQuery
+// Importar la libreria jQuery
 import $ from "jquery"
+// Importar los estilos scss
+import "./styles/main.scss"
 
 function agregarTexto() {
     // Obtener el div por id usando jQuery
