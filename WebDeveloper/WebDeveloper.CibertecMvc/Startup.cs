@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebDeveloper.Core.Interfaces;
+using WebDeveloper.Infra.Data;
 
 namespace WebDeveloper.CibertecMvc
 {
@@ -24,6 +27,9 @@ namespace WebDeveloper.CibertecMvc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            // Configurar el servicio del ChinookContext
+            services.AddDbContext<IChinookContext, ChinookContext>(options => options.UseSqlServer("server=.;database=Chinook;trusted_connection=true;"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
