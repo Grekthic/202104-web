@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using WebDeveloper.Infra;
+using WebDeveloper.Infra.Data;
 using System.Linq;
 
 namespace WebDeveloper.DbOperations

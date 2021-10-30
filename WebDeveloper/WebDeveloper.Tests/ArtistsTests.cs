@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using WebDeveloper.Infra;
+using WebDeveloper.Infra.Data;
 using Xunit;
 
 namespace WebDeveloper.Tests

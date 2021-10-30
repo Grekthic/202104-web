@@ -9,5 +9,6 @@ namespace WebDeveloper.Core.Interfaces
     public interface IChinookContext
     {
         DbSet<Artist> Artists { get; set; }
+        DbSet<Employee> Employees { get; set; }
     }
 }

@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebDeveloper.Core", "WebDev
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebDeveloper.Infra", "WebDeveloper.Infra\WebDeveloper.Infra.csproj", "{7D9E1C04-FC47-44D5-AF99-B9E5A0BB7C68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDeveloper.DbOperations", "WebDeveloper.DbOperations\WebDeveloper.DbOperations.csproj", "{B213C3B1-3CB2-4EDC-BED3-1F34F4F0FFCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebDeveloper.DbOperations", "WebDeveloper.DbOperations\WebDeveloper.DbOperations.csproj", "{B213C3B1-3CB2-4EDC-BED3-1F34F4F0FFCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDeveloper.Tests", "WebDeveloper.Tests\WebDeveloper.Tests.csproj", "{F7BBBF1C-ACD7-4087-9547-D24EB362F394}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebDeveloper.Tests", "WebDeveloper.Tests\WebDeveloper.Tests.csproj", "{F7BBBF1C-ACD7-4087-9547-D24EB362F394}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDeveloper.CibertecMvc", "WebDeveloper.CibertecMvc\WebDeveloper.CibertecMvc.csproj", "{98702240-DC4F-4B11-9C02-F4115099B0AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{F7BBBF1C-ACD7-4087-9547-D24EB362F394}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7BBBF1C-ACD7-4087-9547-D24EB362F394}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7BBBF1C-ACD7-4087-9547-D24EB362F394}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98702240-DC4F-4B11-9C02-F4115099B0AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98702240-DC4F-4B11-9C02-F4115099B0AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98702240-DC4F-4B11-9C02-F4115099B0AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98702240-DC4F-4B11-9C02-F4115099B0AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

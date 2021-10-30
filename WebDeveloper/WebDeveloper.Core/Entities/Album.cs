@@ -5,17 +5,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebDeveloper.Core.Entities
 {
-    [Table("Artist")]
-    public partial class Artist
+    [Table("Album")]
+    public partial class Album
     {
-        public Artist()
+        public Album()
         {
-            Albums = new HashSet<Album>();
+            Tracks = new HashSet<Track>();
         }
 
+        public int AlbumId { get; set; }
+        public string Title { get; set; }
         public int ArtistId { get; set; }
-        public string Name { get; set; }
 
-        public virtual ICollection<Album> Albums { get; set; }
+        public virtual Artist Artist { get; set; }
+        public virtual ICollection<Track> Tracks { get; set; }
     }
 }
