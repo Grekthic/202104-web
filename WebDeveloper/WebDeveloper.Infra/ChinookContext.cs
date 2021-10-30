@@ -9,6 +9,14 @@ namespace WebDeveloper.Infra
 {
     public class ChinookContext : DbContext, IChinookContext
     {
+        public ChinookContext()
+        {
+        }
+
+        public ChinookContext(DbContextOptions options) : base(options)
+        {
+        }
+
         public DbSet<Artist> Artists { get; set; }
     }
 }
