@@ -10,5 +10,6 @@ namespace WebDeveloper.Core.Interfaces
     {
         DbSet<Artist> Artists { get; set; }
         DbSet<Employee> Employees { get; set; }
+        DbSet<InvoiceLine> InvoiceLines { get; set; }
     }
 }
