@@ -9,7 +9,7 @@ namespace WebDeveloper.Core.ViewModels.Reports
         public int TrackId { get; set; }
         public string TrackName { get; set; }
         public string ArtistName { get; set; }
-        public string AlbumName { get; set; }
+        public string AlbumTitle { get; set; }
         public int Quantity { get; set; }
     }
 }

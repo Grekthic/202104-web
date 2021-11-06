@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,15 +19,30 @@ namespace WebDeveloper.Core.Services
 
         public IList<TopCancionVendida> ObtenerTopDeCancionesVendidas(int n)
         {
-            var query = _context.InvoiceLines
-                .GroupBy(il => il.TrackId)
-                .Select(g => new TopCancionVendida
+            //var query = _context.InvoiceLines
+            //    .Include(il=>il.Track)
+            //    .GroupBy(il => il.TrackId) // key, data[] -> 1, InvoiceLine Objects
+            //    .Select(g => new TopCancionVendida
+            //    {
+            //        // Sabemos que los datos de la cancion son el mismo para todo el grupo
+            //        TrackId = g.Key,
+            //        Quantity = g.Sum(g1 => g1.Quantity),
+            //    })
+            //    .OrderByDescending(t => t.Quantity)
+            //    .Take(n);
+
+            var query = _context.Tracks
+                .Select(t => new TopCancionVendida
                 {
-                    TrackId = g.Key,
-                    Quantity = g.Sum(g1 => g1.Quantity)
+                    TrackId = t.TrackId,
+                    TrackName = t.Name,
+                    Quantity = t.InvoiceLines.Sum(il => il.Quantity),
+                    AlbumTitle = t.Album.Title,
+                    ArtistName = t.Album.Artist.Name,
                 })
-                .OrderByDescending(t=>t.Quantity)
+                .OrderByDescending(tcv => tcv.Quantity)
                 .Take(n);
+
             return query.ToList();
         }
     }

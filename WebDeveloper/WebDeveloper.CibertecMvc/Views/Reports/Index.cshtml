@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewData["Title"] = "Reportes";
+}
+
+<h1>Reportes del Aplicativo</h1>
+
+<h2>Valoress de la vist@@</h2> @*Escapar el arroba*@
+<p>Nombre: @ViewData["nombre"]</p>
+<p>Nombre2: @ViewBag.Nombre2</p>
+
+<p>
+    La cantidad de elementos del arreglo es: @ViewBag.Arreglo.Length
+</p>
+
+@for (int i = 0; i < ViewBag.Arreglo.Length; i++)
+{
+    <p>@ViewBag.Arreglo[i]</p>
+}
+

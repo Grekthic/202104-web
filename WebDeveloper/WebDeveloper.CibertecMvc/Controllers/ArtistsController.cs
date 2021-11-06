@@ -7,15 +7,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebDeveloper.CibertecMvc.Models;
 using WebDeveloper.Core.Entities;
+using WebDeveloper.Core.Interfaces;
 using WebDeveloper.Infra.Data;
 
 namespace WebDeveloper.CibertecMvc.Controllers
 {
     public class ArtistsController : Controller
     {
-        private readonly ChinookContext _context;
+        private readonly IChinookContext _context;
 
-        public ArtistsController(ChinookContext context)
+        public ArtistsController(IChinookContext context)
         {
             _context = context;
         }
@@ -59,7 +60,7 @@ namespace WebDeveloper.CibertecMvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(artist);
+                _context.Artists.Add(artist);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -100,7 +101,7 @@ namespace WebDeveloper.CibertecMvc.Controllers
             {
                 try
                 {
-                    _context.Update(artist);
+                    _context.Artists.Update(artist);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

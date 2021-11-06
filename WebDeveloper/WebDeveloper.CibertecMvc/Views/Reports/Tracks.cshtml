@@ -1,0 +1,97 @@
+﻿@model WebDeveloper.CibertecMvc.Models.TrackReportsViewModel
+@{
+    ViewData["Title"] = "Canciones";
+}
+
+@using Highsoft.Web.Mvc.Charts
+@using Highsoft.Web.Mvc.Charts.Rendering
+
+<h1>Reportes de Canciones</h1>
+
+<p>Fecha de ultima actualizacion: @Model.FechaUltimaActualizacion.ToShortDateString()</p>
+
+<h2>Top 3 canciones vendidas</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Artista</th>
+            <th>Album</th>
+            <th>Cantidad</th>
+        </tr>
+    </thead>
+    @foreach (var item in Model.ListaTopCancionesVendidas)
+    {
+        <tr>
+            <td>@item.TrackName</td>
+            <td>@item.ArtistName</td>
+            <td>@item.AlbumTitle</td>
+            <td>@item.Quantity</td>
+        </tr>
+    }
+
+</table>
+
+@{
+    var chartOptions = new Highcharts
+    {
+        Title = new Title
+        {
+            Text = "Grafico de barras"
+        },
+        Subtitle = new Subtitle
+        {
+            Text = "Fuente: Chinook"
+        },
+
+        XAxis = new List<XAxis>
+        {
+                new XAxis
+                {
+                    Categories = Model.ListaTopCancionesVendidas.Select(ltcv=>ltcv.TrackName).ToList()
+                }
+            },
+        YAxis = new List<YAxis>
+{
+                new YAxis
+                {
+                    Min = 0,
+                    Title = new YAxisTitle
+                    {
+                        Text = "Cantidad"
+                    }
+                }
+            },
+        PlotOptions = new PlotOptions
+        {
+            Column = new PlotOptionsColumn
+            {
+                PointPadding = 0.2,
+                BorderWidth = 0,
+                Animation = new Animation { Enabled = false }
+            }
+        },
+        Series = new List<Series>
+        {
+                new ColumnSeries
+                {
+                    Name = "Canciones Vendidas",
+                    Data = Model.HighChartsSerieTopCancionesVendidas
+                },
+        }
+    };
+
+    chartOptions.ID = "chart";
+    var renderer = new HighchartsRenderer(chartOptions);
+}
+
+@Html.Raw(renderer.RenderHtml())
+
+
+@section Scripts {
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+}
+
+
