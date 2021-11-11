@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,8 +28,28 @@ namespace WebDeveloper.CibertecMvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Configurar el esquema de autenticacion
+            services.AddAuthentication("CookieAuth")
+                .AddCookie("CookieAuth", config =>
+                {
+                    config.Cookie.Name = "CibertecAuth";
+                })
+                .AddGoogle(config =>
+                {
+                    config.ClientId = "";
+                    config.ClientSecret = "";
+                    config.Events.OnTicketReceived = googleContext =>
+                    {
+                        var nameIdentifier = googleContext.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                        // El name identifier deberia ser el email de google
+                        // Con esto podriamos validar si el usuario existe en nuestra BD
+                        // Si no exstiese, podriamos crear un nuevo usuario
+                        return Task.CompletedTask;
+                    };
+                });
             // Configurar el servicio del ChinookContext
-            services.AddDbContext<IChinookContext, ChinookContext>(options => options.UseSqlServer("server=.;database=Chinook;trusted_connection=true;"));
+            services.AddDbContext<IChinookContext, ChinookContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ChinookConnection")));
             // Configurar otras dependencias
             services.AddTransient<IReportsService, ReportsService>();
             services.AddControllersWithViews()
@@ -45,7 +66,6 @@ namespace WebDeveloper.CibertecMvc
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
@@ -53,6 +73,7 @@ namespace WebDeveloper.CibertecMvc
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -61,9 +82,7 @@ namespace WebDeveloper.CibertecMvc
                 // 1. / -> HomeController -> Index
                 // 2. /Artists -> ArtistsController -> Index
                 // 3. /Artists/Details/1 -> ArtistsController -> Details(id)
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapDefaultControllerRoute();
             });
         }
     }

@@ -21,8 +21,16 @@ namespace WebDeveloper.CibertecMvcIdentity.Controllers
             _userManager = userManager;
             _emailService = emailService;
         }
-        public IActionResult IniciaSesion()
+
+        public IActionResult IniciaSesion(string returnUrl)
         {
+            // Verificar si el usuario ha iniciado sesion
+            if(User.Identity.IsAuthenticated)
+            {
+                return RedireccionarLocalmente(returnUrl);
+            }
+            // Creamos una variable para pasar a la vista la URL a la cual redireccionar luego de iniciar sesion
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
@@ -34,7 +42,7 @@ namespace WebDeveloper.CibertecMvcIdentity.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> IniciaSesion(string email, string password)
+        public async Task<IActionResult> IniciaSesion(string email, string password, string returnUrl = null)
         {
             // Tratar de obtener el usuario de BD
             var user = await _userManager.FindByEmailAsync(email);
@@ -45,8 +53,8 @@ namespace WebDeveloper.CibertecMvcIdentity.Controllers
                 var resultadoInicioSesion = await _signInManager.PasswordSignInAsync(user, password, false, false);
                 if (resultadoInicioSesion.Succeeded)
                 {
-                    // Si todo esta bien, redirecionar a Home/Index
-                    return RedirectToAction("Index", "Home");
+                    // Si todo esta bien, redirecionaral returnUrl
+                    return RedireccionarLocalmente(returnUrl);
                 }
             }
 
@@ -85,9 +93,61 @@ namespace WebDeveloper.CibertecMvcIdentity.Controllers
                 // Enviamos el correo
                 await _emailService.SendAsync(user.Email, "Confirma tu cuenta", $"<a href=\"{linkUrl}\">Verificar Email</a>", isHtml: true);
 
-                // TODO: redireccionar a una vista de confirmacion
+                // Redireccionar a una vista de confirmacion y adjuntar un parametro del QueryString
+                return RedirectToAction("ConfirmacionEnvio", new { email });
             }
             return View();
+        }
+
+        public IActionResult ConfirmacionEnvio(string email)
+        {
+            ViewBag.Email = email;
+            return View();
+        }
+
+        public async Task<IActionResult> VerificarCuenta(string userId, string token)
+        {
+            // Obtener el usuario
+            var user = await _userManager.FindByIdAsync(userId);
+            if(user == null)
+            {
+                return BadRequest();
+            }
+
+            // Si el usuario existe, lo vamos a confirmar
+            var resultadoConfirmar = await _userManager.ConfirmEmailAsync(user, token);
+
+            if(resultadoConfirmar.Succeeded)
+            {
+                return View();
+            }
+
+            // Ante otro cualquier otro caso, devolver un codigo de error
+            return BadRequest();
+        }
+
+        /// <summary>
+        /// Dada una URL, este metodo hara un redirect "seguro" hacia esa URL
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public IActionResult RedireccionarLocalmente(string url)
+        {
+            if(Url.IsLocalUrl(url))
+            {
+                return Redirect(url);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        public async Task<IActionResult> CerrarSesion()
+        {
+            // Cerrar la sesion
+            await _signInManager.SignOutAsync();
+            return RedireccionarLocalmente(null);
         }
     }
 }

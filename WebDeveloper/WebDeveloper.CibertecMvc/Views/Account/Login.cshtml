@@ -1,0 +1,45 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <title>Login</title>
+</head>
+<body>
+    <div class="sidenav">
+        <div class="login-main-text">
+            <h2>Application<br> Login Page</h2>
+            <p>Login or register from here to access.</p>
+        </div>
+    </div>
+    <div class="main">
+        <div class="col-md-6 col-sm-12">
+            <div class="login-form">
+                <form asp-action="Login" asp-controller="Account" method="post" asp-route-returnurl="@ViewBag.ReturnUrl">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="text" class="form-control" placeholder="Email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" class="form-control" placeholder="Password" name="password">
+                    </div>
+                    <button type="submit" class="btn btn-black">Login</button>
+                    @*<button type="submit" class="btn btn-secondary">Register</button>*@
+                </form>
+                <form asp-action="LoginWithGoogle" asp-controller="Account" method="post">
+                    <button type="submit" class="btn btn-danger">Iniciar Con Google</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -6,6 +6,14 @@
     <title>@ViewBag.Title</title>
 </head>
 <body>
+    <header>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <form asp-action="CerrarSesion" asp-controller="Cuentas">
+                <input type="submit" value="Cerrar Sesion" />
+            </form>
+        }
+    </header>
     <div>
         @RenderBody()
     </div>

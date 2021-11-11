@@ -21,6 +21,12 @@ namespace WebDeveloper.CibertecMvcIdentity.Controllers
             return View();
         }
 
+        [Authorize]
+        public IActionResult OtraAccion()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> EnviarCorreoPrueba()
         {
             await _emailService.SendAsync("mail@algo.com", "Correo de Prueba", "Hola PaperCut!");

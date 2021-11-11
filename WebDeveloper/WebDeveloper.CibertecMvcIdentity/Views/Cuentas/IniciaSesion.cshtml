@@ -6,7 +6,7 @@
 <h1>Inicia Sesion</h1>
 
 <div>
-    <form asp-action="IniciaSesion" asp-controller="Cuentas" method="post">
+    <form asp-action="IniciaSesion" asp-controller="Cuentas" method="post" asp-route-returnurl="@ViewBag.ReturnUrl">
         <input type="text" name="email" value="" />
         <input type="password" name="password" value="" />
         <input type="submit" value="Iniciar" />

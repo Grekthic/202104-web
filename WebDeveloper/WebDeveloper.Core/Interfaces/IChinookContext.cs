@@ -14,6 +14,7 @@ namespace WebDeveloper.Core.Interfaces
         DbSet<Employee> Employees { get; set; }
         DbSet<InvoiceLine> InvoiceLines { get; set; }
         DbSet<Track> Tracks { get; set; }
+        DbSet<ChinookUser> Users { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

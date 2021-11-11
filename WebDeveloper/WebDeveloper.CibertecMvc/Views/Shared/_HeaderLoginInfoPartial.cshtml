@@ -1,0 +1,9 @@
+﻿@if (User.Identity.IsAuthenticated)
+{
+    <form asp-action="SignOut" asp-controller="Account">
+        <span class="navbar-text">
+            Hola, @User.Identity.Name
+        </span>
+        <input type="submit" class="btn btn-sm btn-link" value="Cerrar Sesion" />
+    </form>
+}
