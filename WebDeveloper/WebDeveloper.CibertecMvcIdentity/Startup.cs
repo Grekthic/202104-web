@@ -35,7 +35,9 @@ namespace WebDeveloper.CibertecMvcIdentity
                 config.Password.RequireLowercase = false;
                 // Solo usuarios con el email confirmado pueden iniciar sesion
                 config.SignIn.RequireConfirmedEmail = true;
-            }).AddEntityFrameworkStores<ChinookIdentityContext>();
+            })
+                .AddEntityFrameworkStores<ChinookIdentityContext>()
+                .AddDefaultTokenProviders();
 
             // Configuracion adicional de Identity
             services.ConfigureApplicationCookie(config =>
