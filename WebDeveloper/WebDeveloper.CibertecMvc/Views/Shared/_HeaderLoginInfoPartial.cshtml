@@ -1,6 +1,14 @@
 ﻿@if (User.Identity.IsAuthenticated)
 {
+    // Obtener la foto de google
+    var googleImageClaim = User.Claims.FirstOrDefault(c => c.Type == "urn:google:picture");
     <form asp-action="SignOut" asp-controller="Account">
+        @if(googleImageClaim != null)
+        {
+            <span>
+                <img src="@googleImageClaim.Value" alt="Alternate Text" style="width: 50px" />
+            </span>
+        }
         <span class="navbar-text">
             Hola, @User.Identity.Name
         </span>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,6 +39,8 @@ namespace WebDeveloper.CibertecMvc
                 {
                     config.ClientId = "";
                     config.ClientSecret = "";
+                    config.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
+                    config.ClaimActions.MapJsonKey("urn:google:locale", "locale", "string");
                     config.Events.OnTicketReceived = googleContext =>
                     {
                         var nameIdentifier = googleContext.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
