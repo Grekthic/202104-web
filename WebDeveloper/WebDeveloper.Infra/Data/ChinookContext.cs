@@ -21,7 +21,7 @@ namespace WebDeveloper.Infra.Data
         public virtual DbSet<Genre> Genre { get; set; }
         public virtual DbSet<Invoice> Invoice { get; set; }
         public virtual DbSet<InvoiceLine> InvoiceLines { get; set; }
-        public virtual DbSet<MediaType> MediaType { get; set; }
+        public virtual DbSet<MediaType> MediaTypes { get; set; }
         public virtual DbSet<Playlist> Playlist { get; set; }
         public virtual DbSet<PlaylistTrack> PlaylistTrack { get; set; }
         public virtual DbSet<Track> Tracks { get; set; }

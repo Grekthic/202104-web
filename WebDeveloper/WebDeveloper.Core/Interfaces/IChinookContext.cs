@@ -15,6 +15,7 @@ namespace WebDeveloper.Core.Interfaces
         DbSet<InvoiceLine> InvoiceLines { get; set; }
         DbSet<Track> Tracks { get; set; }
         DbSet<ChinookUser> Users { get; set; }
+        DbSet<MediaType> MediaTypes { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

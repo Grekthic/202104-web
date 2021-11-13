@@ -34,27 +34,28 @@ namespace WebDeveloper.CibertecMvc
                 .AddCookie("CookieAuth", config =>
                 {
                     config.Cookie.Name = "CibertecAuth";
-                })
-                .AddGoogle(config =>
-                {
-                    config.ClientId = "";
-                    config.ClientSecret = "";
-                    config.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
-                    config.ClaimActions.MapJsonKey("urn:google:locale", "locale", "string");
-                    config.Events.OnTicketReceived = googleContext =>
-                    {
-                        var nameIdentifier = googleContext.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                        // El name identifier deberia ser el email de google
-                        // Con esto podriamos validar si el usuario existe en nuestra BD
-                        // Si no exstiese, podriamos crear un nuevo usuario
-                        return Task.CompletedTask;
-                    };
                 });
+                //.AddGoogle(config =>
+                //{
+                //    config.ClientId = "";
+                //    config.ClientSecret = "";
+                //    config.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
+                //    config.ClaimActions.MapJsonKey("urn:google:locale", "locale", "string");
+                //    config.Events.OnTicketReceived = googleContext =>
+                //    {
+                //        var nameIdentifier = googleContext.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                //        // El name identifier deberia ser el email de google
+                //        // Con esto podriamos validar si el usuario existe en nuestra BD
+                //        // Si no exstiese, podriamos crear un nuevo usuario
+                //        return Task.CompletedTask;
+                //    };
+                //});
             // Configurar el servicio del ChinookContext
             services.AddDbContext<IChinookContext, ChinookContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ChinookConnection")));
             // Configurar otras dependencias
             services.AddTransient<IReportsService, ReportsService>();
+            services.AddTransient<ITrackService, TrackService>();
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
         }
@@ -62,6 +63,9 @@ namespace WebDeveloper.CibertecMvc
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // Agregar las cabeceras de seguridad que deberia tener nuestro proyecto
+            // en base a lo que dice OWASP
+            app.UseSecurityHeaders();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
