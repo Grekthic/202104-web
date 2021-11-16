@@ -101,6 +101,8 @@ namespace WebDeveloper.CibertecMvc.Controllers
             {
                 try
                 {
+                    // ID: 5, Name: arturo, OtroCampo: 123
+                    // Nuevos campos: ID: 5, Name: null, OtroCampo: null
                     _context.Artists.Update(artist);
                     await _context.SaveChangesAsync();
                 }

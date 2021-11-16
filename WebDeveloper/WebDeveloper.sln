@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebDeveloper.Tests", "WebDe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebDeveloper.CibertecMvc", "WebDeveloper.CibertecMvc\WebDeveloper.CibertecMvc.csproj", "{98702240-DC4F-4B11-9C02-F4115099B0AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webdeveloper.CibertecMvcIdentityAuto", "Webdeveloper.CibertecMvcIdentityAuto\Webdeveloper.CibertecMvcIdentityAuto.csproj", "{3183672E-D880-492F-B9FC-E5AD2B37190A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Webdeveloper.CibertecMvcIdentityAuto", "Webdeveloper.CibertecMvcIdentityAuto\Webdeveloper.CibertecMvcIdentityAuto.csproj", "{3183672E-D880-492F-B9FC-E5AD2B37190A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDeveloper.CibertecMvcIdentity", "WebDeveloper.CibertecMvcIdentity\WebDeveloper.CibertecMvcIdentity.csproj", "{47CA3B90-D26D-4034-A97C-293ECC62C95A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebDeveloper.CibertecMvcIdentity", "WebDeveloper.CibertecMvcIdentity\WebDeveloper.CibertecMvcIdentity.csproj", "{47CA3B90-D26D-4034-A97C-293ECC62C95A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDeveloper.SignalRServer", "WebDeveloper.SignalRServer\WebDeveloper.SignalRServer.csproj", "{375E08D6-844D-46A2-8208-9963927493E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{47CA3B90-D26D-4034-A97C-293ECC62C95A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47CA3B90-D26D-4034-A97C-293ECC62C95A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47CA3B90-D26D-4034-A97C-293ECC62C95A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{375E08D6-844D-46A2-8208-9963927493E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{375E08D6-844D-46A2-8208-9963927493E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{375E08D6-844D-46A2-8208-9963927493E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{375E08D6-844D-46A2-8208-9963927493E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

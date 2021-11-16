@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Bienvenido al Chat</h1>
+
+<button id="btn-conectar">Conectar</button>
+
+@section Scripts {
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script>
+        // Crear la conexion
+        const connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:5003/chathub").build();
+
+        // Configurar lo que va a pasar en los eventos que envia el Hub
+        connection.on("NuevaConexion", function () {
+            // Cada vez que alguien se conecte, imprimir en consola
+            console.info("Alguien nuevo se conecto!")
+        })
+
+        const btn = document.getElementById("btn-conectar");
+        btn.addEventListener("click", function (e) {
+            // Iniciar la conexion al hub
+            connection.start().then(function () {
+                console.info("La conexion se inicio")
+            })
+        })
+    </script>
+}
+

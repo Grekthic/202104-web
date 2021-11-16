@@ -14,11 +14,11 @@ namespace WebDeveloper.Infra.Data
         {
         }
 
-        public virtual DbSet<Album> Album { get; set; }
+        public virtual DbSet<Album> Albums { get; set; }
         public virtual DbSet<Artist> Artists { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
-        public virtual DbSet<Genre> Genre { get; set; }
+        public virtual DbSet<Genre> Genres { get; set; }
         public virtual DbSet<Invoice> Invoice { get; set; }
         public virtual DbSet<InvoiceLine> InvoiceLines { get; set; }
         public virtual DbSet<MediaType> MediaTypes { get; set; }

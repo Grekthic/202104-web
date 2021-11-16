@@ -16,6 +16,8 @@ namespace WebDeveloper.Core.Interfaces
         DbSet<Track> Tracks { get; set; }
         DbSet<ChinookUser> Users { get; set; }
         DbSet<MediaType> MediaTypes { get; set; }
+        DbSet<Genre> Genres { get; set; }
+        DbSet<Album> Albums { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

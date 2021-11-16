@@ -12,5 +12,7 @@ namespace WebDeveloper.CibertecMvc.Models
         public string ModalTitle { get; set; }
         public Track Track { get; set; }
         public IEnumerable<SelectListItem> MediaTypeList { get; set; }
+        public IEnumerable<SelectListItem> GenreList { get; set; }
+        public IEnumerable<SelectListItem> AlbumList { get; set; }
     }
 }
