@@ -47,6 +47,7 @@ namespace WebDeveloper.SignalRServer
                     await context.Response.WriteAsync("Hello World!");
                 });
                 endpoints.MapHub<ChatHub>("/chathub");
+                endpoints.MapHub<TracksHub>("/trackshub");
             });
         }
     }

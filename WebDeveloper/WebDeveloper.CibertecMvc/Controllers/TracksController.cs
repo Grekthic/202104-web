@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.EntityFrameworkCore;
 using WebDeveloper.CibertecMvc.Models;
 using WebDeveloper.Core.Entities;
@@ -15,10 +16,15 @@ namespace WebDeveloper.CibertecMvc.Controllers
     {
         private readonly ITrackService _trackService;
         private readonly IChinookContext _chinookContext;
+        private readonly HubConnection _hubConnection;
         public TracksController(ITrackService trackService, IChinookContext chinookContext)
         {
             _trackService = trackService;
             _chinookContext = chinookContext;
+            // Crear la conexion hacia el Hub de Tracks
+            _hubConnection = new HubConnectionBuilder()
+                .WithUrl("https://localhost:5003/trackshub")
+                .Build();
         }
         public async Task<IActionResult> Index()
         {
@@ -85,6 +91,8 @@ namespace WebDeveloper.CibertecMvc.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveAjax(Track newTrack)
         {
+            // Guardar el id de track temporalmente
+            var tmpNewTrackId = newTrack.TrackId;
             // Validar el modelo
             if (!ModelState.IsValid)
             {
@@ -121,6 +129,16 @@ namespace WebDeveloper.CibertecMvc.Controllers
             if(saveResult <= 0)
             {
                 return new JsonResult(new { success = false, message = "Ningun Registro fue Afectado" });
+            }
+
+            // Notificar el registro a traves de SignalR
+            if(tmpNewTrackId == 0)
+            {
+                // Inicializar la conexion
+                await _hubConnection.StartAsync();
+
+                // Invocar el metodo del hub para notificar a los clientes
+                await _hubConnection.InvokeAsync("NotificarRegistro", newTrack.TrackId, newTrack.Name);
             }
 
             // Devolver la respuesta satisfactoria

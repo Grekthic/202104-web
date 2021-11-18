@@ -46,7 +46,7 @@
         },
 
         XAxis = new List<XAxis>
-        {
+{
                 new XAxis
                 {
                     Categories = Model.ListaTopCancionesVendidas.Select(ltcv=>ltcv.TrackName).ToList()
@@ -73,7 +73,7 @@
             }
         },
         Series = new List<Series>
-        {
+{
                 new ColumnSeries
                 {
                     Name = "Canciones Vendidas",
@@ -88,10 +88,112 @@
 
 @Html.Raw(renderer.RenderHtml())
 
+<br />
+<button id="btn-test">Generar Nuevo punto de grafica</button>
+<div id="container" style="height: 400px; min-width: 310px"></div>
 
+@section HeadStyles {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+}
 @section Scripts {
-    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script>
+        // Cuando se termine de cargar toda la pagina correctamente
+        window.addEventListener("load", function () {
+            // Crear la conexion
+            const connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:5003/trackshub").build();
+            // Iniciar la conexion
+            connection.start().then(function () {
+                console.info("La conexion se inicio")
+            })
+            // Configurar los callbacks de los eventos recibidos
+            connection.on("NotificarNuevaCancion", function (id, name) {
+                toastr.info(`Se ha creado la cancion ${name} con id ${id}`);
+            })
+
+            let graphSeries;
+            connection.on("PintarNuevaCantidadCanciones", function (count, date) {
+                // Agregar un nuevo punto a la grafica
+                console.info("data", { count, date })
+                const newDate = new Date(date);
+                graphSeries.addPoint([newDate.getTime(), count], true, true);
+            })
+
+            // Inicializar la grafica
+            const btnTest = this.document.getElementById("btn-test");
+            btnTest.addEventListener("click", function () {
+                var x = (new Date()).getTime(), // current time
+                    y = Math.round(Math.random() * 100);
+                graphSeries.addPoint([x, y], true, true);
+            })
+            Highcharts.stockChart('container', {
+                chart: {
+                    events: {
+                        load: function () {
+
+                            // set up the updating of the chart each second
+                            graphSeries = this.series[0];
+                            //setInterval(function () {
+                            //    var x = (new Date()).getTime(), // current time
+                            //        y = Math.round(Math.random() * 100);
+                            //    graphSeries.addPoint([x, y], true, true);
+                            //}, 1000);
+                        }
+                    }
+                },
+
+                time: {
+                    useUTC: false
+                },
+
+                rangeSelector: {
+                    buttons: [{
+                        count: 1,
+                        type: 'minute',
+                        text: '1M'
+                    }, {
+                        count: 5,
+                        type: 'minute',
+                        text: '5M'
+                    }, {
+                        type: 'all',
+                        text: 'All'
+                    }],
+                    inputEnabled: false,
+                    selected: 0
+                },
+
+                title: {
+                    text: 'Live random data'
+                },
+
+                exporting: {
+                    enabled: false
+                },
+
+                series: [{
+                    name: 'Random data',
+                    data: (function () {
+                        // generate an array of random data
+                        var data = [],
+                            time = (new Date()).getTime(),
+                            i;
+
+                        for (i = -999; i <= 0; i += 1) {
+                            data.push([
+                                time + i * 1000,
+                                Math.round(Math.random() * 100)
+                            ]);
+                        }
+                        return data;
+                    }())
+                }]
+            });
+        })
+    </script>
 }
 
 

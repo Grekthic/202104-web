@@ -7,16 +7,34 @@
 
 <button id="btn-conectar">Conectar</button>
 
+<div id="chat-box" class="border overflow-auto" style="height:300px">
+</div>
+
+<div class="form-group my-2">
+    <input type="text" id="chat-input" class="form-control" placeholder="Ingresa un mensaje" />
+</div>
+
+<div>
+    <button id="btn-chat">Enviar</button>
+</div>
+
 @section Scripts {
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
     <script>
+        // Obtener los controles
+        const chatBox = document.getElementById("chat-box");
         // Crear la conexion
         const connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:5003/chathub").build();
 
         // Configurar lo que va a pasar en los eventos que envia el Hub
-        connection.on("NuevaConexion", function () {
-            // Cada vez que alguien se conecte, imprimir en consola
-            console.info("Alguien nuevo se conecto!")
+        connection.on("NuevaConexion", function (connectionId) {
+            // Cada vez que alguien se conecte, mostrar un mensaje en el chat box
+            const msg = document.createElement("p");
+            chatBox.append(`Alguien se ha conectado: ${connectionId}`, msg);
+        })
+        connection.on("RecibirMensaje", function (mensaje) {
+            const msg = document.createElement("p");
+            chatBox.append(`${mensaje}`, msg);
         })
 
         const btn = document.getElementById("btn-conectar");
@@ -25,6 +43,16 @@
             connection.start().then(function () {
                 console.info("La conexion se inicio")
             })
+        })
+
+        // Agregar la logica del chat
+        const btnChat = document.getElementById("btn-chat");
+        btnChat.addEventListener("click", function (e) {
+            // Obtener el mensaje a enviar
+            const mensaje = document.getElementById("chat-input").value;
+
+            // Invoicar el metodo del Hub
+            connection.invoke("TransmitirMensaje", mensaje);
         })
     </script>
 }
