@@ -66,5 +66,11 @@ namespace WebDeveloper.Api.Controllers
         {
             return $"Hola 3 {nombre} {param.P1} {param.P2}";
         }
+
+        [HttpGet("force-error")]
+        public IActionResult ForceError()
+        {
+            throw new Exception("Este es un error forzado");
+        }
     }
 }
