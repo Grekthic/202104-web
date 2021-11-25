@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using WebDeveloper.Core.Interfaces;
@@ -32,9 +36,42 @@ namespace WebDeveloper.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Configurar el esquema de autenticacion basado en JWTs
+            // AddJwtBearer significa que los clientes van a tener que enviar el JWT en 
+            // el header de la solicitude de la siguiente forma:
+            // Authorization: Bearer jwt_token
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(jwtConfig =>
+            {
+                // Lo ideal es que este flag este habilitado para produccion
+                jwtConfig.RequireHttpsMetadata = false;
+                jwtConfig.TokenValidationParameters = new TokenValidationParameters
+                {
+                    // El Issuer es la entidad que genero el token
+                    ValidIssuer = "Cibertec",
+                    // Los clientes (audiences) que estan permitidos a usar estos JWTs
+                    ValidAudience = "app-react",
+                    // La llave privada que se usara para firmar los JWTs
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("mi-llave-ultra-secreta")),
+                    // Validar la expiracion del JWT
+                    RequireExpirationTime = true,
+                    ValidateLifetime = true,
+                };
+            });
             // Inyectar la dependencia hacia el db context
             services.AddDbContext<IChinookContext, ChinookContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ChinookConnection")));
-            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            
+            
+            services.AddControllers(config=>
+            {
+                // Con esto estamos haciendo que todas las acciones (endpoints) se autentiquen
+                config.Filters.Add(new AuthorizeFilter());
+            })
+                // Configurar el serializador de JSON (Por defecto se usa System.Text.Json)
+                .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             // Configurar Swagger
             services.AddSwaggerGen(setup =>
@@ -80,6 +117,8 @@ namespace WebDeveloper.Api
             });
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

@@ -20,6 +20,8 @@ namespace WebDeveloper.Core.Entities
         [MaxLength(50, ErrorMessage = "La longitud debe ser maximo de 5 caracteres")]
         public string Name { get; set; }
 
+        public int RegisteredBy { get; set; }
+
         public virtual ICollection<Album> Albums { get; set; }
     }
 }
