@@ -20,6 +20,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using WebDeveloper.Core.Interfaces;
+using WebDeveloper.Core.Services;
 using WebDeveloper.Infra.Data;
 
 namespace WebDeveloper.Api
@@ -36,6 +37,23 @@ namespace WebDeveloper.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Crear el objeto con los parametros de validacion para el JWT
+            var jwtValidationParameters = new TokenValidationParameters
+            {
+                // El Issuer es la entidad que genero el token
+                ValidIssuer = "Cibertec",
+                // Los clientes (audiences) que estan permitidos a usar estos JWTs
+                ValidAudience = "app-react",
+                // La llave privada que se usara para firmar los JWTs
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("mi-llave-ultra-secreta")),
+                // Validar la expiracion del JWT
+                RequireExpirationTime = true,
+                ValidateLifetime = true,
+            };
+
+            // Inyectar el objeto anterior como un singleton
+            services.AddSingleton(jwtValidationParameters);
+
             // Configurar el esquema de autenticacion basado en JWTs
             // AddJwtBearer significa que los clientes van a tener que enviar el JWT en 
             // el header de la solicitude de la siguiente forma:
@@ -48,22 +66,14 @@ namespace WebDeveloper.Api
             {
                 // Lo ideal es que este flag este habilitado para produccion
                 jwtConfig.RequireHttpsMetadata = false;
-                jwtConfig.TokenValidationParameters = new TokenValidationParameters
-                {
-                    // El Issuer es la entidad que genero el token
-                    ValidIssuer = "Cibertec",
-                    // Los clientes (audiences) que estan permitidos a usar estos JWTs
-                    ValidAudience = "app-react",
-                    // La llave privada que se usara para firmar los JWTs
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("mi-llave-ultra-secreta")),
-                    // Validar la expiracion del JWT
-                    RequireExpirationTime = true,
-                    ValidateLifetime = true,
-                };
+                jwtConfig.TokenValidationParameters = jwtValidationParameters;
             });
             // Inyectar la dependencia hacia el db context
             services.AddDbContext<IChinookContext, ChinookContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ChinookConnection")));
-            
+
+            // Inyectar los servicios
+            // Transient: llega un request -> crea la dependencia -> se destruye la dependencia
+            services.AddTransient<IJwtService, JwtService>();
             
             services.AddControllers(config=>
             {

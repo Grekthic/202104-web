@@ -18,6 +18,7 @@ namespace WebDeveloper.Core.Interfaces
         DbSet<MediaType> MediaTypes { get; set; }
         DbSet<Genre> Genres { get; set; }
         DbSet<Album> Albums { get; set; }
+        DbSet<RefreshToken> RefreshTokens { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

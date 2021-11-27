@@ -26,6 +26,7 @@ namespace WebDeveloper.Infra.Data
         public virtual DbSet<PlaylistTrack> PlaylistTrack { get; set; }
         public virtual DbSet<Track> Tracks { get; set; }
         public virtual DbSet<ChinookUser> Users { get; set; }
+        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

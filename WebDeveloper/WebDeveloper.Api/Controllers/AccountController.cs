@@ -18,10 +18,12 @@ namespace WebDeveloper.Api.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IChinookContext _chinookContext;
+        private readonly IJwtService _jwtService;
 
-        public AccountController(IChinookContext chinookContext)
+        public AccountController(IChinookContext chinookContext, IJwtService jwtService)
         {
             _chinookContext = chinookContext;
+            _jwtService = jwtService;
         }
 
         [HttpPost("token-test")]
@@ -62,31 +64,40 @@ namespace WebDeveloper.Api.Controllers
                 return Unauthorized(new { message = "Credenciales invalidas" });
             }
 
-            // Construir la identidad del usuario basada en claims
-            var identityClaims = new[]
+            var crearJWTResponse = await _jwtService.CrearJWT(user);
+
+            return Ok(crearJWTResponse);
+        }
+
+        [HttpPost("refresh-token")]
+        [AllowAnonymous] // Hacemos que esta ruta sea publica
+        public async Task<IActionResult> RefreshToken([FromBody]RefreshTokenRequest request)
+        {
+            // Validar el jwt para obtener el user id
+            var userId = _jwtService.ValidarJWT(request.Token);
+
+            // Obtener el usuario
+            var user = await _chinookContext.Users.FindAsync(userId);
+
+            if(user == null)
             {
-                new Claim("sub", user.UserId.ToString()),
-                new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim("dni", user.Dni)
-            };
+                return Unauthorized(new { message = "Token invalido" });
+            }
 
-            // Crear los objetos para firmar el JWT
-            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("mi-llave-ultra-secreta"));
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+            // Validar el refresh token en la BD
+            var bdRefreshToken = await _chinookContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken && rt.UserId == user.UserId);
 
-            // Crear el JWT
-            var expirationDate = DateTime.Now.AddSeconds(30 * 60);
-            var tokenParams = new JwtSecurityToken(
-                    issuer: "Cibertec",
-                    audience: "app-react",
-                    expires: expirationDate,
-                    signingCredentials: credentials,
-                    claims: identityClaims
-                );
-            var token = new JwtSecurityTokenHandler().WriteToken(tokenParams);
+            if(bdRefreshToken == null)
+            {
+                return Unauthorized(new { message = "Refresh Token invalido" });
+            }
 
-            return Ok(new { token, expires = new DateTimeOffset(expirationDate).ToUnixTimeSeconds() });
+            // TODO: cada refresh token deberia tener un flag de usado o implementar un tecnica de rotacion de tokens (sobreescribir los tokens para el mismo usuario)
+
+            // Generar un nuevo token
+            var crearJWTResponse = await _jwtService.CrearJWT(user);
+
+            return Ok(crearJWTResponse);
         }
 
         [HttpGet("user")]
