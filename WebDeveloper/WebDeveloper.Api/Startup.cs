@@ -68,6 +68,19 @@ namespace WebDeveloper.Api
                 jwtConfig.RequireHttpsMetadata = false;
                 jwtConfig.TokenValidationParameters = jwtValidationParameters;
             });
+
+            // Configurar el CORS
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("*")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                    });
+            });
+
             // Inyectar la dependencia hacia el db context
             services.AddDbContext<IChinookContext, ChinookContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ChinookConnection")));
 
@@ -127,6 +140,8 @@ namespace WebDeveloper.Api
             });
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthentication();
 
